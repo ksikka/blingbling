@@ -67,7 +67,7 @@ n = 100
 print 'Estimated tempo:        %.2f BPM' % tempo
 print 'First %d beat frames:\n' % n, beats[:n]
 
-beat_times = librosa.frames_to_time(beats[:n], sr=sr)
+beat_times = librosa.frames_to_time(beats[:n], sr=sr, hop_length=64)
 print 'First %d beat times:\n' % n, beat_times
 
 print 'Saving in beattimes.json'
