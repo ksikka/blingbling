@@ -3,7 +3,7 @@
 
 # In[1]:
 
-get_ipython().magic(u'matplotlib inline')
+#get_ipython().magic(u'matplotlib inline')
 
 import os
 
@@ -18,7 +18,7 @@ import IPython.display
 
 # In[26]:
 
-audio_path = "/home/user/Downloads/justice-dance.mp3"
+audio_path = "justice-dance.mp3"
 
 y, sr = librosa.load(audio_path, sr=22050)
 
@@ -66,4 +66,11 @@ n = 100
 
 print 'Estimated tempo:        %.2f BPM' % tempo
 print 'First %d beat frames:\n' % n, beats[:n]
-print 'First %d beat times:\n' % n, librosa.frames_to_time(beats[:n], sr=sr)
+
+beat_times = librosa.frames_to_time(beats[:n], sr=sr)
+print 'First %d beat times:\n' % n, beat_times
+
+print 'Saving in beattimes.json'
+import json
+with open('beattimes.json', 'w') as f:
+    json.dump(beat_times.tolist(), f)
