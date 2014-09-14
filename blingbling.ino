@@ -15,10 +15,17 @@ void loop() {
   {
     
       digitalWrite(ledpin, HIGH);  // turn ON the LED
+      digitalWrite(11, HIGH);
+      digitalWrite(9, HIGH);
+      digitalWrite(7, HIGH);
       delay(100);  
    
       digitalWrite(ledpin, LOW);  // turn ON the LED
-    
+      digitalWrite(11, LOW);
+      digitalWrite(9, LOW);
+      digitalWrite(7, LOW);
+   
+   
     val = Serial.read();         // read it and store it in 'val'
     Serial.write(val);
   }/*
