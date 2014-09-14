@@ -18,7 +18,7 @@ import IPython.display
 
 # In[26]:
 
-audio_path = "justice-dance.mp3"
+audio_path = "turn-down-for-what.mp3"
 
 y, sr = librosa.load(audio_path, sr=22050)
 
@@ -48,7 +48,7 @@ IPython.display.Audio(data=y_percussive, rate=sr)
 
 # In[63]:
 
-tempo, beats = librosa.beat.beat_track(y=y_percussive, sr=sr)
+tempo, beats = librosa.beat.beat_track(y=y_harmonic, sr=sr)
 
 plt.figure(figsize=(12,4))
 librosa.display.specshow(log_S, sr=sr, hop_length=64, x_axis='time', y_axis='mel')
