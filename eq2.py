@@ -13,14 +13,74 @@ import librosa
 import matplotlib.pyplot as plt
 import IPython.display
 
+GENDATA = False
+if len(sys.argv) == 0:
+    gen_data = sys.argv[0]
+    GENDATA = gen_data == 'gendata'
 
-# In[26]:
 
 audio_path = "hurtz.mp3"
 audio_path = "justice-dance.mp3"
 audio_path = "trololo.mp3"
 audio_path = "turn-down-for-what.mp3"
+output_csv = "onsets.csv"
 
+import threading
+import time
+
+def play_song(songname):
+    return os.system('afplay ' + songname)
+
+if not GENDATA:
+    t = threading.Thread(target=play_song, args=(audio_path,))
+    t.start()
+
+    start = time.time()
+
+    with open(output_csv) as f:
+        times = [float(s.strip()) for s in f.readlines() if s.strip() != ""]
+
+    for t in sorted(times):
+        current = time.time()
+        t_off = current - start
+        time.delay(time - t_off)
+        print t
+
+    t.join()
+else:
+    # 1. load the wav file and resample to 22.050 KHz
+    print 'Loading ', audio_path
+    y, sr = librosa.load(audio_path, sr=22050)
+
+    # Use a default hop size of 64 frames @ 22KHz ~= 11.6ms
+    hop_length = 64
+
+    # This is the window length used by default in stft
+    n_fft = 2048
+
+    # 2. run onset detection
+    print 'Detecting onsets...'
+    onsets = librosa.onset.onset_detect(y=y,
+                                        sr=sr,
+                                        hop_length=hop_length)
+
+    print "Found {} onsets.".format(onsets.shape[0])
+
+    # 3. save output
+    # 'beats' will contain the frame numbers of beat events.
+
+    onset_times = librosa.frames_to_time(onsets,
+                                         sr=sr,
+                                         hop_length=hop_length,
+                                         n_fft=n_fft)
+
+    print 'Saving output to ', output_csv
+    librosa.output.times_csv(output_csv, onset_times)
+    print 'done!'
+
+sys.exit(0)
+
+""" PREVIOUS JUnK """
 y, sr = librosa.load(audio_path, sr=22050)
 x = np.abs(librosa.stft(y))
 axes = librosa.display.specshow(x)
