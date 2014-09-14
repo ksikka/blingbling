@@ -8,14 +8,11 @@
 import math
 import os
 import sys
-import numpy as np
-import librosa
-import matplotlib.pyplot as plt
-import IPython.display
 
 GENDATA = False
-if len(sys.argv) == 0:
-    gen_data = sys.argv[0]
+if len(sys.argv) > 1:
+    print sys.argv
+    gen_data = sys.argv[1]
     GENDATA = gen_data == 'gendata'
 
 
@@ -23,7 +20,7 @@ audio_path = "hurtz.mp3"
 audio_path = "justice-dance.mp3"
 audio_path = "trololo.mp3"
 audio_path = "turn-down-for-what.mp3"
-output_csv = "onsets.csv"
+output_csv = "onsets"
 
 import threading
 import time
@@ -43,11 +40,15 @@ if not GENDATA:
     for t in sorted(times):
         current = time.time()
         t_off = current - start
-        time.delay(time - t_off)
+        time.sleep(t - t_off)
         print t
 
     t.join()
 else:
+    import numpy as np
+    import librosa
+    import matplotlib.pyplot as plt
+    import IPython.display
     # 1. load the wav file and resample to 22.050 KHz
     print 'Loading ', audio_path
     y, sr = librosa.load(audio_path, sr=22050)
@@ -59,23 +60,26 @@ else:
     n_fft = 2048
 
     # 2. run onset detection
-    print 'Detecting onsets...'
-    onsets = librosa.onset.onset_detect(y=y,
-                                        sr=sr,
-                                        hop_length=hop_length)
+    for i in xrange(1,5):
+        delta = i / 10.0
+        print 'Detecting onsets with delta = ' + str(delta) + ' ...'
+        onsets = librosa.onset.onset_detect(y=y,
+                                            sr=sr,
+                                            hop_length=hop_length,
+                                            delta=delta)
 
-    print "Found {} onsets.".format(onsets.shape[0])
+        print "Found {} onsets.".format(onsets.shape[0])
 
-    # 3. save output
-    # 'beats' will contain the frame numbers of beat events.
+        # 3. save output
+        # 'beats' will contain the frame numbers of beat events.
 
-    onset_times = librosa.frames_to_time(onsets,
-                                         sr=sr,
-                                         hop_length=hop_length,
-                                         n_fft=n_fft)
+        onset_times = librosa.frames_to_time(onsets,
+                                             sr=sr,
+                                             hop_length=hop_length,
+                                             n_fft=n_fft)
 
-    print 'Saving output to ', output_csv
-    librosa.output.times_csv(output_csv, onset_times)
+        print 'Saving output to ', output_csv
+        librosa.output.times_csv(output_csv+'-%d'%(i+1), onset_times)
     print 'done!'
 
 sys.exit(0)
