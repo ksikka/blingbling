@@ -34,14 +34,18 @@ if not GENDATA:
 
     start = time.time()
 
-    with open(output_csv) as f:
-        times = [float(s.strip()) for s in f.readlines() if s.strip() != ""]
+    g_times = []
+    for i in xrange(1,5):
+        with open(output_csv + '-%d' % i) as f:
+            g_times.extend( [(float(s.strip()),i) for s in f.readlines() if s.strip() != ""] )
 
-    for t in sorted(times):
+    for t in sorted(g_times, key=lambda x: x[0]):
         current = time.time()
         t_off = current - start
-        time.sleep(t - t_off)
-        print t
+        time_till_onset = t[0] - t_off
+        if time_till_onset > 0:
+            time.sleep(time_till_onset)
+        print t[1]*"\t" + str(t[0])
 
     t.join()
 else:
