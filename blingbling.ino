@@ -13,23 +13,15 @@ void setup() {
 void loop() {
   if( Serial.available() )       // if data is available to read
   {
-    if (isOn) {
-      digitalWrite(ledpin, LOW);  // turn ON the LED
-      isOn = false;
-    } else {
+    
       digitalWrite(ledpin, HIGH);  // turn ON the LED
-      isOn = true;
-    }
+      delay(100);  
+   
+      digitalWrite(ledpin, LOW);  // turn ON the LED
+    
     val = Serial.read();         // read it and store it in 'val'
     Serial.write(val);
   }/*
-  if( val == 'H' )               // if 'H' was received
-  {
-    digitalWrite(ledpin, HIGH);  // turn ON the LED
-  } 
-  else { 
-    digitalWrite(ledpin, LOW);   // otherwise turn it OFF
-  }
   */
   delay(100);                    // wait 100ms for next reading
 }
