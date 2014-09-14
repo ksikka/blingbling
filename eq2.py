@@ -62,10 +62,10 @@ else:
     print 'Splitting into harmonic and percussion ...'
     y_harm, y_perc = librosa.effects.hpss(y)
 
-    configs = [(0.2, y_harm)
-             , (0.3, y_harm)
+    configs = [(.06, y_harm)
+             , (.12, y_harm)
              , (0.2, y_perc)
-             , (0.3, y_perc)
+             , (0.28, y_perc)
              ]
 
     # 2. run onset detection
