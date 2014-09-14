@@ -66,7 +66,7 @@ else:
     tempo, beats = librosa.beat.beat_track(y, sr, hop_length=64)
     beat_times = librosa.frames_to_time(beats, sr, hop_length=64)
     print 'Saving output to ', output_csv+'-5'
-    librosa.output.times_csv(output_csv+'-5', onset_times)
+    librosa.output.times_csv(output_csv+'-5', beat_times)
 
     print 'Splitting into harmonic and percussion ...'
     y_harm, y_perc = librosa.effects.hpss(y)
