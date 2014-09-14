@@ -59,6 +59,11 @@ else:
     # This is the window length used by default in stft
     n_fft = 2048
 
+    tempo, beats = librosa.beat.beat_track(y, sr, hop_length=64)
+    beat_times = librosa.frames_to_time(beats, sr, hop_length=64)
+    print 'Saving output to ', output_csv+'-5'
+    librosa.output.times_csv(output_csv+'-5', onset_times)
+
     print 'Splitting into harmonic and percussion ...'
     y_harm, y_perc = librosa.effects.hpss(y)
 
@@ -87,7 +92,7 @@ else:
                                              hop_length=hop_length,
                                              n_fft=n_fft)
 
-        print 'Saving output to ', output_csv
+        print 'Saving output to ', output_csv+'-%d'%(i+1)
         librosa.output.times_csv(output_csv+'-%d'%(i+1), onset_times)
     print 'done!'
 
