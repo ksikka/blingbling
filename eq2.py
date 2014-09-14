@@ -11,7 +11,7 @@ import sys
 
 GENDATA = False
 if len(sys.argv) > 1:
-    print sys.argv
+    #print sys.argv
     gen_data = sys.argv[1]
     GENDATA = gen_data == 'gendata'
 
@@ -59,11 +59,20 @@ else:
     # This is the window length used by default in stft
     n_fft = 2048
 
+    print 'Splitting into harmonic and percussion ...'
+    y_harm, y_perc = librosa.effects.hpss(y)
+
+    configs = [(0.2, y_harm)
+             , (0.3, y_harm)
+             , (0.2, y_perc)
+             , (0.3, y_perc)
+             ]
+
     # 2. run onset detection
-    for i in xrange(1,5):
-        delta = i / 10.0
+    for i in xrange(4):
+        delta, sound_wave = configs[i]
         print 'Detecting onsets with delta = ' + str(delta) + ' ...'
-        onsets = librosa.onset.onset_detect(y=y,
+        onsets = librosa.onset.onset_detect(y=sound_wave,
                                             sr=sr,
                                             hop_length=hop_length,
                                             delta=delta)
