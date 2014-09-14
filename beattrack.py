@@ -62,13 +62,11 @@ plt.tight_layout()
 
 # In[64]:
 
-n = 100
-
 print 'Estimated tempo:        %.2f BPM' % tempo
-print 'First %d beat frames:\n' % n, beats[:n]
+print 'Beat frames:\n', beats
 
-beat_times = librosa.frames_to_time(beats[:n], sr=sr, hop_length=64)
-print 'First %d beat times:\n' % n, beat_times
+beat_times = librosa.frames_to_time(beats, sr=sr, hop_length=64)
+print 'Beat times:\n', beat_times
 
 print 'Saving in beattimes.json'
 import json
