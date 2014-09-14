@@ -1,10 +1,15 @@
-from getch.getch import getch
 import time
 import json
+import sys
 
 GEN_DATA = False
+if len(sys.argv) > 1:
+    #print sys.argv
+    gen_data = sys.argv[1]
+    GENDATA = gen_data == 'gendata'
 
 if GEN_DATA:
+    from getch.getch import getch
 
     print "Starting in 3"
     time.sleep(1)
@@ -36,13 +41,19 @@ if GEN_DATA:
     print json.dumps(times)
 
 else:
-    files = ['s1', 's2', 's3', 's4', 's5']
+    files = ['onsets-1', 'onsets-2', 'onsets-3', 'onsets-4', 'onsets-5']
     g_time_list = []
     for i, fname in enumerate( files ):
+        """
         with open(fname + '.json') as f:
             for t in json.load(f):
                 g_time_list.append((t,i))
+                """
+        with open(fname) as f:
+            for line in f.readlines():
+                if line.strip() != "":
+                    g_time_list.append((float(line.strip()),i))
 
-    g_time_list.sort(key=lambda x: x[1])
+    g_time_list.sort(key=lambda x: x[0])
 
     print json.dumps(g_time_list)

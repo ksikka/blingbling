@@ -35,7 +35,7 @@ if not GENDATA:
     start = time.time()
 
     g_times = []
-    for i in xrange(1,5):
+    for i in xrange(1,6):
         with open(output_csv + '-%d' % i) as f:
             g_times.extend( [(float(s.strip()),i) for s in f.readlines() if s.strip() != ""] )
 
